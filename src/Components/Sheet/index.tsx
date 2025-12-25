@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Table from './Table';
 
 type SheetLabels = {
@@ -12,6 +12,13 @@ const MySheetLabels: SheetLabels = {"phonelines": "Lines","phones": "Phones","si
 
 function Sheet(){
     const [sheetName, setSheetName] = useState<string>('phonelines');
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const handleSheetChange = (newSheet: string) => {
+        setSheetName(newSheet);
+        setSearchQuery(''); // Reset search query when sheet changes
+    };
+
     return (
         <div>
             <div className="sheet-container">
@@ -21,17 +28,22 @@ function Sheet(){
                         {Object.entries(MySheetLabels).map(([key,value])=>(
                             <li 
                                 key={key}
-                                onClick={() => setSheetName(key)}
+                                onClick={() => handleSheetChange(key)}
                                 className={`clickable ${sheetName==key ? 'selected' : ''}`}
                             >{value}</li>
                         ))}
                     </ul>
                 </div>
                 <div className="sheet-table">
-                    <Table name={sheetName} />
+                    <Table name={sheetName} searchQuery={searchQuery} />
                 </div>
                 <div className="search-bar">
-                    <input type="text" placeholder="Search..." />
+                    <input 
+                        type="text" 
+                        placeholder="Search..." 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                     <button>Search</button>
                 </div>
             </div>

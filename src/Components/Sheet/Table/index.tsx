@@ -6,6 +6,7 @@ import type { Phone, Line, SIM } from '../../../Interfaces';
 
 type TableProps = {
     name: string;
+    searchQuery: string;
 };
 
 const fields: Record<string, string[]> = {
@@ -27,8 +28,16 @@ const readableFields: Record<string, string> = {
   shipped: "Shipped?"
 }
 
-function Table({name}: TableProps) {
+// Map sheet names to their primary keys
+const primaryKeys: Record<string, string> = {
+  phonelines: "phone_number",
+  sims: "sim_number",
+  phones: "imei"
+};
+
+function Table({name, searchQuery}: TableProps) {
   const [data, setData] = useState<Phone[] | SIM[] | Line[]>([]);
+  const [filteredData, setFilteredData] = useState<Phone[] | SIM[] | Line[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +66,24 @@ function Table({name}: TableProps) {
     };
     fetchData();
   }, [name]);
+
+  // Filter data based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredData(data);
+      return;
+    }
+
+    const primaryKey = primaryKeys[name];
+    const filtered = data.filter((row) => {
+      const value = row[primaryKey as keyof typeof row];
+      if (typeof value === 'string') {
+        return value.toLowerCase().includes(searchQuery.toLowerCase());
+      }
+      return false;
+    }) as Phone[] | SIM[] | Line[];
+    setFilteredData(filtered);
+  }, [data, searchQuery, name]);
 
   const handleOpenCreateModal = () => {
     setModalMode('create');
@@ -113,7 +140,7 @@ function Table({name}: TableProps) {
                 <TableHead columns={columns} readable={readableFields} onCreateClick={handleOpenCreateModal} />
             </thead>
             <tbody>
-               {data && data.map((row, i) => (
+               {filteredData && filteredData.map((row, i) => (
                 <TableRow key={i} columns={columns} data={row} onRowClick={() => handleOpenEditModal(row)} />
                ))}
             </tbody>
