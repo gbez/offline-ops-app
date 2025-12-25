@@ -147,14 +147,18 @@ function Table({name, searchQuery}: TableProps) {
                 <TableHead columns={columns} readable={readableFields} onCreateClick={handleOpenCreateModal} />
             </thead>
             <tbody>
-               {filteredData && filteredData.map((row) => (
-                <TableRow 
-                  key={row[primaryKey as keyof typeof row] as string} 
-                  columns={columns} 
-                  data={row} 
-                  onRowClick={() => handleOpenEditModal(row)} 
-                />
-               ))}
+               {filteredData && filteredData.map((row) => {
+                 const keyValue = row[primaryKey as keyof typeof row];
+                 const uniqueKey = String(keyValue);
+                 return (
+                   <TableRow 
+                     key={uniqueKey} 
+                     columns={columns} 
+                     data={row} 
+                     onRowClick={() => handleOpenEditModal(row)} 
+                   />
+                 );
+               })}
             </tbody>
         </table>
         </div>
