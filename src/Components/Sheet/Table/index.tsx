@@ -41,7 +41,7 @@ function Table({name}: TableProps) {
       try {
         const base = import.meta.env.VITE_API_URL;
         const url = `${base}/api/v1/${name}`;
-        const response = await fetch(url); // Replace with your API endpoint
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

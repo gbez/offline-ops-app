@@ -133,7 +133,7 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
                     <input
                         type="checkbox"
                         id={field}
-                        checked={value}
+                        checked={value as boolean}
                         onChange={(e) => handleInputChange(field, e.target.checked)}
                     />
                 </div>
@@ -146,7 +146,7 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
                 <input
                     type="text"
                     id={field}
-                    value={value}
+                    value={value as string || ''}
                     onChange={(e) => handleInputChange(field, e.target.value)}
                     required
                 />
