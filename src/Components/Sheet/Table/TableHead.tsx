@@ -1,17 +1,16 @@
-import React from 'react';
-
 type Props = {
     columns: string[];
-    readable: Record<string,string>
+    readable: Record<string,string>;
+    onCreateClick: () => void;
 }
 
-const TableHead = ({columns,readable}: Props) => {
+const TableHead = ({columns,readable, onCreateClick}: Props) => {
     return (
         <tr>
             {columns.map((col) => (
-                <th>{readable[col]}</th>
+                <th key={col}>{readable[col]}</th>
             ))}
-            <th><button>Create</button></th>
+            <th><button onClick={onCreateClick}>Create</button></th>
         </tr>
     )
 }
