@@ -75,6 +75,12 @@ function Table({name, searchQuery}: TableProps) {
     }
 
     const primaryKey = primaryKeys[name];
+    if (!primaryKey) {
+      // If no primary key is defined for this sheet, show all data
+      setFilteredData(data);
+      return;
+    }
+
     const filtered = data.filter((row) => {
       const value = row[primaryKey as keyof typeof row];
       if (typeof value === 'string') {
@@ -131,6 +137,7 @@ function Table({name, searchQuery}: TableProps) {
   }
 
   const columns: string[] = fields[name];
+  const primaryKey = primaryKeys[name];
 
     return (
         <>
@@ -140,8 +147,13 @@ function Table({name, searchQuery}: TableProps) {
                 <TableHead columns={columns} readable={readableFields} onCreateClick={handleOpenCreateModal} />
             </thead>
             <tbody>
-               {filteredData && filteredData.map((row, i) => (
-                <TableRow key={i} columns={columns} data={row} onRowClick={() => handleOpenEditModal(row)} />
+               {filteredData && filteredData.map((row) => (
+                <TableRow 
+                  key={row[primaryKey as keyof typeof row] as string} 
+                  columns={columns} 
+                  data={row} 
+                  onRowClick={() => handleOpenEditModal(row)} 
+                />
                ))}
             </tbody>
         </table>
