@@ -1,0 +1,222 @@
+/* Dashboard.css
+   Basic responsive layout for Dashboard
+   - Header at top
+   - Two-column main area: sidebar (~25%) + sheet (~75%)
+   - Stacks on small screens
+   - Footer pinned to bottom of the viewport
+*/
+
+:root {
+  --gap: 1rem;
+  --sidebar-width: 25%;
+  --sheet-width: 75%;
+  --bg: #004fee;
+  --card-bg: #ff0e0e;
+  --muted: #6b7280;
+  width: 100%;
+  min-height: 100vh; 
+  box-sizing: border-box; /* Ensures padding and borders are included in the element's total width/height */
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.dashboard {
+    width: 100vw;
+    background-color: #111827;
+}
+
+.dashboard-container {
+  min-height: 100vh; /* ensure footer can be pushed to bottom */
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: 2.25rem;
+  box-sizing: border-box;
+  background: var(--bg);
+  color: #e9edf5;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.dashboard-container h3{
+    font-weight: 800;
+    color: black;
+    padding: none;
+    margin: none;
+}
+
+.sheet-title h3{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+/* Main content spans full width of the container */
+.dashboard-header,
+.dashboard-elements,
+.dashboard-footer {
+  width: 100%;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+/* Main area stretches to fill available space so footer stays at bottom */
+.dashboard-elements {
+  display: flex;
+  gap: var(--gap);
+  flex: 1 1 auto;
+  align-items: stretch;
+}
+
+.sidebar {
+  flex: 0 0 var(--sidebar-width);
+  max-width: var(--sidebar-width);
+  min-width: 0;
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+  box-sizing: border-box;
+}
+
+.sheet {
+  flex: 0 0 var(--sheet-width);
+  max-width: var(--sheet-width);
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+  box-sizing: border-box;
+}
+
+.dashboard-footer {
+  text-align: center;
+  padding: 0.75rem 0;
+  color: var(--muted);
+}
+
+.dashboard-footer h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.dashboard-footer p {
+  color: white;
+}
+
+.sheet-options{
+  margin-bottom: 5px;
+}
+
+.sheet-options ul{
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sheet-options li{
+  padding: 10px;
+  color: blue;
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.sidebar-options{
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-options li{
+  padding: 10px;
+  color: blue;
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 10px;
+  margin-right: 1rem;
+}
+
+.sidebar-options li:hover{
+  background-color: aqua;
+}
+
+.selected{
+  background-color: aqua !important;
+}
+
+.sheet-options li:hover{
+  background-color: aqua;
+}
+
+.sheet-options li:last-child{
+  margin-right: none;
+}
+
+.clickable{
+  cursor: pointer;
+}
+
+.sheet-title{
+  font-size: 2rem;
+  padding: none;
+  margin: none;
+}
+
+.sheet-table{
+  border: 3px solid black;
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  max-height: 350px;
+  overflow: scroll;
+}
+
+.sheet-table th{
+  padding-right: 2rem;
+}
+
+.search-bar input{
+  height: 40px;
+  width: 75%;
+}
+
+.search-bar{
+  margin-bottom: 10px;
+}
+
+.search-bar button {
+  height: 50px;
+  padding: none;
+  margin-left: 5px;
+}
+/* Responsive: stack on smaller screens */
+@media (max-width: 768px) {
+html, body, #root {
+  overflow: auto;
+}
+
+  .dashboard-elements {
+    flex-direction: column;
+  }
+
+  .sidebar,
+  .sheet {
+    max-width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .dashboard-header h1 {
+    text-align: center;
+  }
+}

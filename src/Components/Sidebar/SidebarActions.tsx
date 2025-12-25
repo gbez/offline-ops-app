@@ -1,0 +1,40 @@
+import { useEffect, useState } from 'react';
+
+type actions = {
+    sim2phone: string,
+    subscription2label: string,
+    label2phone: string,
+    generateBulkSimSwap: string,
+    requestMoreLines: string,
+    requestMoreBlankSims: string,
+    testPhones: string,
+    generateShippingLabels: string,
+    reorderMorePhones: string,
+    [key: string]: string
+}
+
+const MyActions: actions = {
+    "sim2phone": "Associate SIM and Phone",
+    "subscription2label": "Associate Subscription and Shipping Label",
+    "label2phone":"Associate Shipping Label and Phone",
+    "generateBulkSimSwap": "Generate SIM Swap Sheet",
+    "requestMoreLines": "Request More Lines",
+    "requestMoreBlankSims": "Request More Blank SIMs",
+    "reorderMorePhones": "Reorder More Phones",
+    "generateShippingLabels": "Generate Shipping Labels",
+    "testPhones": "Test Phones"
+}
+
+function SidebarActions() {
+    return (
+            <div className="sidebar-actions">
+                <ul style={{listStyle:'none'}}>
+                    {Object.entries(MyActions).map(([key,value])=>(
+                        <li key={key}><a href={`/actions/${key}`}className='clickable'>{value}</a></li>
+                    ))}
+                </ul>
+            </div>
+    )
+}
+
+export default SidebarActions;
