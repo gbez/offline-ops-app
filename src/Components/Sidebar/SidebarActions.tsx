@@ -28,7 +28,7 @@ const MyActions: actions = {
 function SidebarActions() {
     return (
             <div className="sidebar-actions">
-                <ul style={{listStyle:'none'}}>
+                <ul>
                     {Object.entries(MyActions).map(([key,value])=>(
                         <li key={key}><a href={`/actions/${key}`}className='clickable'>{value}</a></li>
                     ))}

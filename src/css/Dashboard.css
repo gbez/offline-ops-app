@@ -10,8 +10,8 @@
   --gap: 1rem;
   --sidebar-width: 25%;
   --sheet-width: 75%;
-  --bg: #004fee;
-  --card-bg: #ff0e0e;
+  --bg: white;
+  --card-bg: white;
   --muted: #6b7280;
   width: 100%;
   min-height: 100vh; 
@@ -36,7 +36,7 @@ html, body, #root {
   padding: 2.25rem;
   box-sizing: border-box;
   background: var(--bg);
-  color: #e9edf5;
+  color: black;
   font-family:Arial, Helvetica, sans-serif;
 }
 
@@ -61,6 +61,7 @@ html, body, #root {
 
 .dashboard-header h1 {
   margin: 0;
+  color: black;
   font-size: 1.8rem;
   font-weight: 700;
 }
@@ -82,6 +83,7 @@ html, body, #root {
   padding: 1rem;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
   box-sizing: border-box;
+  border: 1px solid black;
 }
 
 .sheet {
@@ -92,6 +94,7 @@ html, body, #root {
   padding: 1rem;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
   box-sizing: border-box;
+  border: 1px solid black;
 }
 
 .dashboard-footer {
@@ -149,6 +152,12 @@ html, body, #root {
 
 .sidebar-options li:hover{
   background-color: aqua;
+}
+
+.sidebar-actions{
+  text-align: left !important;
+  font-size: smaller;
+  color: black;
 }
 
 .selected{
