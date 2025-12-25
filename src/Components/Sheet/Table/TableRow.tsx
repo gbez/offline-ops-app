@@ -13,12 +13,6 @@ const TableRow = ({columns,data, onRowClick}:Props) => {
             {columns.map((col,i) => (
                 <td key={i}>{getPropertyValue(data,col as keyof typeof data)}</td>
             ))}
-            <td>
-                Edit
-            </td>
-            <td>
-                Save
-            </td>
         </tr>
     );
 };
