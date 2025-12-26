@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import Association from "./Components/Actions/Association";
 import Email from "./Components/Actions/Email";
+import ActivatePhones from './Components/Actions/ActivatePhones';
 
 
 const simBody: { status: string} = {
@@ -58,8 +59,8 @@ function Actions() {
                 secondBody={subscriptionBody}
                 />
         );
-    } else if(action_id == "generateBulkSimSwap"){
-        return (<Email endpoint={"/bulkSimSwap"} />)
+    } else if(action_id == "activatePhones"){
+        return (<ActivatePhones />)
     } else if(action_id == "requestMoreLines"){
         return (<Email endpoint={"/moreLines"} />)
     } else if(action_id == "requestMoreBlankSims"){

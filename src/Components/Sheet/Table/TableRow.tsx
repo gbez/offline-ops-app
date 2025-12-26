@@ -6,9 +6,10 @@ type Props = {
     columns: string[];
     onRowClick: () => void;
     interfaceType: string;
+    columnWidths: Record<string, number>;
 }
 
-const TableRow = ({columns,data, onRowClick, interfaceType}:Props) => {
+const TableRow = ({columns,data, onRowClick, interfaceType, columnWidths}:Props) => {
     
     // Determine if row needs highlighting
     const needsHighlight = () => {
@@ -51,7 +52,15 @@ const TableRow = ({columns,data, onRowClick, interfaceType}:Props) => {
                         color: displayValue === 'true' ? '#155724' : '#721c24',
                         border: `1px solid ${displayValue === 'true' ? '#c3e6cb' : '#f5c6cb'}`
                     };
-                    return <td key={i}><span style={pillStyle}>{displayValue}</span></td>;
+                    const cellStyle: React.CSSProperties = {
+                        width: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                        minWidth: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                        maxWidth: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                    };
+                    return <td key={i} style={cellStyle}><span style={pillStyle}>{displayValue}</span></td>;
                 }
                 
                 // Style SIM status values as colored pills
@@ -87,10 +96,26 @@ const TableRow = ({columns,data, onRowClick, interfaceType}:Props) => {
                         };
                     }
                     
-                    return <td key={i}><span style={pillStyle}>{displayValue}</span></td>;
+                    const cellStyle: React.CSSProperties = {
+                        width: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                        minWidth: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                        maxWidth: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                    };
+                    return <td key={i} style={cellStyle}><span style={pillStyle}>{displayValue}</span></td>;
                 }
                 
-                return <td key={i}>{displayValue}</td>;
+                const cellStyle: React.CSSProperties = {
+                    width: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                    minWidth: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                    maxWidth: columnWidths[col] ? `${columnWidths[col]}px` : 'auto',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                };
+                return <td key={i} style={cellStyle}>{displayValue}</td>;
             })}
         </tr>
     );

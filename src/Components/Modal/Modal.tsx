@@ -27,8 +27,8 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
         'phonelines.owner_type':['','Gift/Waived','Offline Staff','Current M.O.','Subscriber'],
         'phonelines.source':['','dpI','Jan 26 NYC','Jan 26 DC', 'July 25 DC', 'May 25 DC', 'Sept 25 DC','Nov 25 DC'],
         'phonelines.action':['','Grant Check','Theo Check','Lydia Check'],
-        'phones.bulkSIMSwapStatus': ['','Pending','Completed','Failed'],
-        'phones.newActivationStatus': ['','Pending','Completed','Failed'],
+        'phones.bulkSIMSwapStatus': ['','Initiated','Pending','Completed','Failed'],
+        'phones.newActivationStatus': ['','Initiated','Pending','Completed','Failed'],
         'sims.status': ['Active', 'Blank'],
 
     };

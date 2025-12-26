@@ -3,6 +3,7 @@ import TableRow from './TableRow';
 import TableHead from './TableHead';
 import Modal from '../../Modal';
 import type { Phone, Line, SIM } from '../../../Interfaces';
+import useApiData from '../../../util/useApiData';
 
 type TableProps = {
     name: string;
@@ -13,7 +14,7 @@ type TableProps = {
 const fields: Record<string, string[]> = {
     phonelines: ["phone_number","owner_name","status","subscription_id","owner_type","source"],
     sims: ["sim_number","status"],
-    phones: ["imei","sim_number","isActive","hasSIM","isTested"]
+    phones: ["imei","sim_number","isActive","isTested"]
 };
 
 const readableFields: Record<string, string> = {
@@ -63,38 +64,22 @@ function filterDataByQuery(data: (Phone | Line | SIM)[], query: string):(Phone |
 }
 
 function Table({name,searchQuery,triggerCreate}: TableProps) {
-  const [data, setData] = useState<(Phone | Line | SIM)[]>([]);
+  // Use the custom hook to fetch data from the API
+  // This replaces the manual useEffect, useState for data/loading/error
+  const { data, isLoading, error, refetch } = useApiData<Phone | Line | SIM>(name);
+  
   const [filteredData, setFilteredData] = useState<(Phone | Line | SIM)[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [selectedData, setSelectedData] = useState<Phone | Line | SIM | undefined>(undefined);
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizingColumn, setResizingColumn] = useState<string | null>(null);
+  const [startX, setStartX] = useState(0);
+  const [startWidth, setStartWidth] = useState(0);
   
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const base = import.meta.env.VITE_API_URL;
-        const url = `${base}/api/v1/${name}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        setData(result);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-        setData([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [name]);
-
   useEffect(() => {
     let result = data;
     
@@ -103,7 +88,23 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
       result = filterDataByQuery(data, searchQuery);
     }
     
-    // Apply sorting
+    // For phonelines, prioritize rows with non-blank action field ONLY on initial load
+    // (no search query and no user-defined sorting)
+    if (name === 'phonelines' && !searchQuery.trim() && !sortColumn) {
+      result = [...result].sort((a, b) => {
+        const aHasAction = 'action' in a && a.action !== null && a.action !== undefined && a.action !== '';
+        const bHasAction = 'action' in b && b.action !== null && b.action !== undefined && b.action !== '';
+        
+        // If both have action or both don't have action, maintain current order (0)
+        // If only a has action, it should come first (-1)
+        // If only b has action, it should come first (1)
+        if (aHasAction && !bHasAction) return -1;
+        if (!aHasAction && bHasAction) return 1;
+        return 0;
+      });
+    }
+    
+    // Apply user-defined sorting
     if (sortColumn) {
       result = [...result].sort((a, b) => {
         const aValue = a[sortColumn as keyof typeof a];
@@ -124,7 +125,7 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
     }
     
     setFilteredData(result);
-  }, [data, searchQuery, sortColumn, sortDirection]);
+  }, [data, searchQuery, sortColumn, sortDirection, name]);
 
   const handleColumnSort = (column: string) => {
     if (sortColumn === column) {
@@ -153,24 +154,47 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
     setSelectedData(undefined);
   };
 
+  const handleResizeStart = (e: React.MouseEvent, column: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsResizing(true);
+    setResizingColumn(column);
+    setStartX(e.clientX);
+    const currentWidth = columnWidths[column] || 150; // Default width if not set
+    setStartWidth(currentWidth);
+  };
+
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!resizingColumn) return;
+      const diff = e.clientX - startX;
+      const newWidth = Math.max(50, startWidth + diff); // Minimum width of 50px
+      setColumnWidths(prev => ({
+        ...prev,
+        [resizingColumn]: newWidth
+      }));
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      setResizingColumn(null);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing, resizingColumn, startX, startWidth]);
+
   const handleModalSuccess = async () => {
-    // Refresh data after successful create/update
-    setIsLoading(true);
-    try {
-      const base = import.meta.env.VITE_API_URL;
-      const url = `${base}/api/v1/${name}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const result = await response.json();
-      setData(result);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-    } finally {
-      setIsLoading(false);
-    }
+    // Use the refetch function from the hook to refresh data
+    // This is much simpler than the previous manual fetch logic!
+    refetch();
   };
 
   if (isLoading) {
@@ -197,11 +221,13 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
                   onColumnClick={handleColumnSort}
                   sortColumn={sortColumn}
                   sortDirection={sortDirection}
+                  columnWidths={columnWidths}
+                  onResizeStart={handleResizeStart}
                 />
             </thead>
             <tbody>
                {filteredData && filteredData.map((row, i) => (
-                <TableRow key={i} columns={columns} data={row} onRowClick={() => handleOpenEditModal(row)} interfaceType={name} />
+                <TableRow key={i} columns={columns} data={row} onRowClick={() => handleOpenEditModal(row)} interfaceType={name} columnWidths={columnWidths} />
                ))}
             </tbody>
         </table>

@@ -46,6 +46,7 @@ function Association({
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [localScannerEnabled, setLocalScannerEnabled] = useState(scannerMode);
+  const [isSimActive, setIsSimActive] = useState(false);
 
   const sheetTwoRef = useRef<HTMLInputElement | null>(null);
   const sheetOneRef = useRef<HTMLInputElement | null>(null);
@@ -123,7 +124,11 @@ function Association({
         const url = `${base}/api/v1/${secondEndPoint}/`
         console.log(url);
         console.log(body);
-        const res = await axios.post(url, {...body,...secondBody});
+        // Update SIM status if secondBody has a status field
+        const updatedSecondBody = secondBody.status !== undefined 
+          ? { ...secondBody, status: isSimActive ? 'Active' : 'Blank' }
+          : secondBody;
+        const res = await axios.post(url, {...body,...updatedSecondBody});
         secondData = res.data;
       }
 
@@ -195,6 +200,7 @@ function Association({
 
   return (
     <div className="association-action">
+      <h1>Associate Data</h1>
       <form onSubmit={handleSubmit} className="association-form">
         <div className="form-row">
           <label htmlFor="sheetOneId">{capitalizeFirstLetter(firstEndPoint)}</label>
@@ -237,6 +243,19 @@ function Association({
           Scanner mode (auto-focus and auto-submit)
         </label>
       </div>
+
+      {secondBody?.status !== undefined && (
+        <div className="scanner-toggle" style={{ marginTop: 8 }}>
+          <label>
+            <input
+              type="checkbox"
+              checked={isSimActive}
+              onChange={(e) => setIsSimActive(e.target.checked)}
+            />
+            Active SIM
+          </label>
+        </div>
+      )}
 
       {/* Toast notification */}
       {toast && (

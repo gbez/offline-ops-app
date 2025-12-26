@@ -37,7 +37,6 @@
   padding: 24px;
   border-radius: 8px;
   background: #fff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
 .association-form .form-row{
@@ -79,6 +78,54 @@
   font-size: 1.125rem;
   border-radius: 6px;
   cursor: pointer;
+  background-color: #4A90E2;
+  color: white;
+  font-weight: bold;
+  border: none;
+}
+
+.association-form button:hover{
+  background-color: #357ABD;
+}
+
+.association-form button:disabled{
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.activate-phones{
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.activate-phones input{
+  font-size: large;
+  height: 40px;
+  border: 3px solid black;
+  border-radius: 10px;
+}
+
+.activate-phones button{
+  height: 45px;
+  border-radius: 10px;
+  background-color: #4A90E2;
+  margin-left: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.activate-phones button:hover{
+  background-color: #357ABD;
 }
 
 @media (max-width: 480px){
