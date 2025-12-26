@@ -13,7 +13,7 @@ type TableProps = {
 const fields: Record<string, string[]> = {
     phonelines: ["phone_number","owner_name","status","subscription_id","owner_type","source"],
     sims: ["sim_number","status"],
-    phones: ["imei","sim_number","hasSIM","isTested","shipped"]
+    phones: ["imei","sim_number","isActive","hasSIM","isTested"]
 };
 
 const readableFields: Record<string, string> = {
@@ -27,7 +27,8 @@ const readableFields: Record<string, string> = {
   hasSIM: "Has SIM?",
   isTested: "Tested?",
   shipped: "Shipped?",
-  owner_name: "Name"
+  owner_name: "Name",
+  isActive: "Active?"
 }
 
 const primaryKeys: Record<string, string> = {
@@ -182,6 +183,7 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
 
 
   const columns: string[] = fields[name];
+  console.log(columns);
 
     return (
         <>
@@ -199,7 +201,7 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
             </thead>
             <tbody>
                {filteredData && filteredData.map((row, i) => (
-                <TableRow key={i} columns={columns} data={row} onRowClick={() => handleOpenEditModal(row)} />
+                <TableRow key={i} columns={columns} data={row} onRowClick={() => handleOpenEditModal(row)} interfaceType={name} />
                ))}
             </tbody>
         </table>

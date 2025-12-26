@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 function Stats() {
-    const [data, setData] = useState<string>('');
+    const [data, setData] = useState<{label: string, value: string}[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
       
@@ -20,7 +20,7 @@ function Stats() {
         setError(null);
         } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
-        setData('');
+        setData([]);
         } finally {
         setIsLoading(false);
         }
@@ -38,17 +38,11 @@ function Stats() {
 
     return (
         <div className="stats">
-            <h5>Lines</h5>
-                <p>Active Lines: 5</p>
-            <h5>SIMs</h5>
-                <p>Available SIMs: 10</p>
-            <h5>Phones</h5>
-                <p>Active Phones: 5</p>
-            <h5>Subscriptions</h5>
-                <p>Active Subscriptions: 5</p>
-            <h5>Shipments</h5>
-                <p>Active Shipments: 5</p>
-
+            {data.map((stat) => (
+                <div className='stat-item'>
+                    <p><strong>{stat.label}:</strong> {stat.value}</p>
+                </div>
+            ))}
         </div>
     )
 }

@@ -84,6 +84,7 @@ html, body, #root {
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
   box-sizing: border-box;
   border: 3px solid black;
+  display: block;
 }
 
 .sheet {
@@ -160,9 +161,23 @@ thead tr{
 
 .sidebar-actions{
   text-align: left !important;
-  font-size: smaller;
+  font-size: 16px;
   color: black;
 }
+
+.sidebar-actions a{
+  color: black !important;
+  transition-property: font-size;
+  transition-duration: 0.25s; 
+  transition-timing-function: ease-out;
+}
+
+.sidebar-actions a:hover{
+  color: blue !important;
+  text-decoration: underline;
+  font-size: 22px;
+}
+
 
 .selected{
   background-color: aqua !important;
@@ -246,6 +261,12 @@ thead tr{
   height: 50px;
   padding: none;
   margin-left: 5px;
+}
+
+.stats{
+  text-align: left;
+  overflow: scroll;
+  max-height: 500px;
 }
 /* Responsive: stack on smaller screens */
 @media (max-width: 768px) {

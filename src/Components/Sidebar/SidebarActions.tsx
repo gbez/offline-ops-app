@@ -14,9 +14,9 @@ type actions = {
 }
 
 const MyActions: actions = {
-    "sim2phone": "Associate SIM and Phone",
-    "subscription2label": "Associate Subscription and Shipping Label",
-    "label2phone":"Associate Shipping Label and Phone",
+    "sim2phone": "SIM < > Phone",
+    "subscription2label": "Subscription < > Label",
+    "label2phone":"Label < > Phone",
     "generateBulkSimSwap": "Generate SIM Swap Sheet",
     "requestMoreLines": "Request More Lines",
     "requestMoreBlankSims": "Request More Blank SIMs",

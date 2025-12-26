@@ -24,7 +24,13 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
     // Define dropdown options for specific interface.field combinations
     const dropdownOptions: Record<string, string[]> = {
         'phonelines.status': ['In Use', 'Available', 'Ready For Use'],
+        'phonelines.owner_type':['','Gift/Waived','Offline Staff','Current M.O.','Subscriber'],
+        'phonelines.source':['','dpI','Jan 26 NYC','Jan 26 DC', 'July 25 DC', 'May 25 DC', 'Sept 25 DC','Nov 25 DC'],
+        'phonelines.action':['','Grant Check','Theo Check','Lydia Check'],
+        'phones.bulkSIMSwapStatus': ['','Pending','Completed','Failed'],
+        'phones.newActivationStatus': ['','Pending','Completed','Failed'],
         'sims.status': ['Active', 'Blank'],
+
     };
 
     useEffect(() => {
@@ -129,8 +135,18 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
         }
     };
 
+    const isPrimaryKey = (field: string): boolean => {
+        const primaryKeys: Record<string, string> = {
+            'phonelines': 'phone_number',
+            'phones': 'imei',
+            'sims': 'sim_number'
+        };
+        return mode === 'edit' && primaryKeys[interfaceType] === field;
+    };
+
     const renderFormField = (field: string, value: string | boolean | undefined) => {
         const fieldType = typeof value;
+        const isDisabled = isPrimaryKey(field);
 
         if (fieldType === 'boolean') {
             return (
@@ -141,6 +157,7 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
                         id={field}
                         checked={value as boolean}
                         onChange={(e) => handleInputChange(field, e.target.checked)}
+                        disabled={isDisabled}
                     />
                 </div>
             );
@@ -156,8 +173,8 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
                         id={field}
                         value={value as string || ''}
                         onChange={(e) => handleInputChange(field, e.target.value)}
+                        disabled={isDisabled}
                     >
-                        <option value="">Select {getFieldLabel(field)}</option>
                         {dropdownOptions[dropdownKey].map(option => (
                             <option key={option} value={option}>{option}</option>
                         ))}
@@ -174,6 +191,7 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
                     id={field}
                     value={value as string || ''}
                     onChange={(e) => handleInputChange(field, e.target.value)}
+                    disabled={isDisabled}
                 />
             </div>
         );
