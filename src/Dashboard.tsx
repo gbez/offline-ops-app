@@ -8,7 +8,6 @@ function Dashboard () {
         <div className="dashboard">
             <div className="dashboard-container">
                 <div className="dashboard-header">
-                    <h1>Offline Dashboard</h1>
                 </div>
                 <div className="dashboard-elements">
                     <div className="sidebar">

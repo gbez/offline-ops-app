@@ -83,7 +83,7 @@ html, body, #root {
   padding: 1rem;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
   box-sizing: border-box;
-  border: 1px solid black;
+  border: 3px solid black;
 }
 
 .sheet {
@@ -94,7 +94,11 @@ html, body, #root {
   padding: 1rem;
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
   box-sizing: border-box;
-  border: 1px solid black;
+  border: 3px solid black;
+}
+
+thead tr{
+  position: relative;
 }
 
 .dashboard-footer {
@@ -187,17 +191,51 @@ html, body, #root {
   border-radius: 10px;
   background-color: white;
   color: black;
-  max-height: 350px;
+  height: 400px;
   overflow: scroll;
 }
 
+.sheet-table table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
 .sheet-table th{
-  padding-right: 2rem;
+  padding: 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+
+.sheet-table td{
+  padding: 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.sheet-table tbody tr:hover{
+  background-color: aqua;
+}
+
+.search-bar {
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 3px solid black;
 }
 
 .search-bar input{
+  border: none;
   height: 40px;
-  width: 75%;
+  width: 89%;
+}
+
+.search-bar input:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .search-bar{

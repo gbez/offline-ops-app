@@ -3,12 +3,14 @@ export interface Phone {
     sim_number: string,
     hasSIM: boolean,
     tested: boolean,
-    shipped: boolean
+    shipped: boolean,
+    [key: string]: any
 }
 
 export interface SIM {
     sim_number: string,
-    status: string
+    status: string,
+    [key: string]: any
 }
 
 export interface Line {
@@ -17,7 +19,8 @@ export interface Line {
     subscription_id: string,
     status: string,
     owner_type: string,
-    source: string
+    source: string,
+    [key: string]: any
 }
 
 export function getPropertyValue<T, K extends keyof T>(obj: T, key: K): T[K] {

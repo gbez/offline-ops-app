@@ -21,6 +21,12 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    // Define dropdown options for specific interface.field combinations
+    const dropdownOptions: Record<string, string[]> = {
+        'phonelines.status': ['In Use', 'Available', 'Ready For Use'],
+        'sims.status': ['Active', 'Blank'],
+    };
+
     useEffect(() => {
         if (isOpen && mode === 'edit' && data) {
             setFormData({ ...data });
@@ -70,7 +76,7 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
             source: 'Source',
             imei: 'IMEI',
             hasSIM: 'Has SIM?',
-            tested: 'Tested?',
+            isTested: 'Tested?',
             shipped: 'Shipped?'
         };
         return labels[field] || field;
@@ -140,6 +146,26 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
             );
         }
 
+        // Check if this field should be a dropdown for this specific interface
+        const dropdownKey = `${interfaceType}.${field}`;
+        if (dropdownOptions[dropdownKey]) {
+            return (
+                <div key={field} className="form-field">
+                    <label htmlFor={field}>{getFieldLabel(field)}</label>
+                    <select
+                        id={field}
+                        value={value as string || ''}
+                        onChange={(e) => handleInputChange(field, e.target.value)}
+                    >
+                        <option value="">Select {getFieldLabel(field)}</option>
+                        {dropdownOptions[dropdownKey].map(option => (
+                            <option key={option} value={option}>{option}</option>
+                        ))}
+                    </select>
+                </div>
+            );
+        }
+
         return (
             <div key={field} className="form-field">
                 <label htmlFor={field}>{getFieldLabel(field)}</label>
@@ -148,7 +174,6 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
                     id={field}
                     value={value as string || ''}
                     onChange={(e) => handleInputChange(field, e.target.value)}
-                    required
                 />
             </div>
         );
