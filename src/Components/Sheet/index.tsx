@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Table from './Table';
 
 type SheetLabels = {
@@ -13,16 +13,16 @@ const MySheetLabels: SheetLabels = {"phonelines": "Lines","phones": "Phones","si
 function Sheet(){
     const [sheetName, setSheetName] = useState<string>('phonelines');
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [triggerCreate, setTriggerCreate] = useState<number>(0);
+    // const [triggerCreate, setTriggerCreate] = useState<number>(0);
 
     const handleSheetChange = (newSheet: string) => {
         setSheetName(newSheet);
         setSearchQuery('');
     };
 
-    const handleCreateClick = () => {
-        setTriggerCreate(prev => prev + 1);
-    };
+    // const handleCreateClick = () => {
+    //     setTriggerCreate(prev => prev + 1);
+    // };
 
     return (
         <div>
@@ -42,7 +42,7 @@ function Sheet(){
                     </ul>
                 </div>
                 <div className="sheet-table">
-                    <Table name={sheetName} searchQuery={searchQuery} triggerCreate={triggerCreate} />
+                    <Table name={sheetName} searchQuery={searchQuery} />
                 </div>
                 <div className="search-bar">
                     <input 

@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import Actions from "./Actions";
 import './App.css'
@@ -15,8 +13,6 @@ function ExternalRedirect({ url }: { url: string }) {
 }
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
      <div

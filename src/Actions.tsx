@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import Association from "./Components/Actions/Association";
 import Email from "./Components/Actions/Email";

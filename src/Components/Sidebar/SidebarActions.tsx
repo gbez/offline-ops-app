@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+
 
 type actions = {
     sim2phone: string,

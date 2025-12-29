@@ -9,7 +9,7 @@ type Props = {
     onResizeStart: (e: React.MouseEvent, column: string) => void;
 }
 
-const TableHead = ({columns, readable, onCreateClick, onColumnClick, sortColumn, sortDirection, columnWidths, onResizeStart}: Props) => {
+const TableHead = ({columns, readable, onColumnClick, sortColumn, sortDirection, columnWidths, onResizeStart}: Props) => {
     const getSortIndicator = (col: string) => {
         if (sortColumn !== col) return '';
         return sortDirection === 'asc' ? ' ↑' : ' ↓';

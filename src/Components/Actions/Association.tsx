@@ -192,20 +192,6 @@ function Association({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [secondValue, firstValue, localScannerEnabled]);
 
-  // Small helpers for testing with a simulated scanner
-  const simulateScanFirst = (value: string) => {
-    setFirstValue(value);
-    if (localScannerEnabled) {
-      // focus will happen via effect
-      setTimeout(() => sheetTwoRef.current?.focus(), 50);
-    }
-  };
-
-  const simulateScanSecond = (value: string) => {
-    setSecondValue(value);
-    // submission will happen via effect if scanner enabled
-  };
-
   const location = useLocation();
   const currentPath = location.pathname;
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Stats from "./Stats";
 import SidebarActions from "./SidebarActions"
 import Settings from "./Settings"

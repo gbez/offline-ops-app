@@ -76,10 +76,10 @@ function ActivatePhones() {
     const inputRef = useRef<HTMLInputElement | null>(null);
     
     // Fetch all phones from the API
-    const { data: phones, isLoading: phonesLoading, error: phonesError } = useApiData('phones');
+    const { data: phones } = useApiData('phones');
     
     // Fetch all phone lines from the API
-    const { data: lines, isLoading: linesLoading, error: linesError } = useApiData('phonelines');
+    const { data: lines } = useApiData('phonelines');
 
     // Console log the data to confirm it's loading
     

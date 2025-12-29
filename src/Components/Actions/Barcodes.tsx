@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import JsBarcode from 'jsbarcode';
 import { jsPDF } from 'jspdf';

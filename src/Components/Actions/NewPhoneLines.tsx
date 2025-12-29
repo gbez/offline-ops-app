@@ -41,9 +41,9 @@ function NewPhoneLines() {
       const rowCount = allLines.length / 4;
       
       // Split into 4 sections
-      const orderNumbers = allLines.slice(0, rowCount);
+      // const orderNumbers = allLines.slice(0, rowCount); // Column 1: ignored
       const simNumbers = allLines.slice(rowCount, rowCount * 2);
-      const ratePlans = allLines.slice(rowCount * 2, rowCount * 3);
+      // const ratePlans = allLines.slice(rowCount * 2, rowCount * 3); // Column 3: ignored
       const phoneNumbers = allLines.slice(rowCount * 3, rowCount * 4);
 
       // Create phone line objects

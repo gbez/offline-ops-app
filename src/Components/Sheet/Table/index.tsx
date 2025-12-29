@@ -8,7 +8,6 @@ import useApiData from '../../../util/useApiData';
 type TableProps = {
     name: string;
     searchQuery: string;
-    triggerCreate: number;
 };
 
 const fields: Record<string, string[]> = {
@@ -32,11 +31,11 @@ const readableFields: Record<string, string> = {
   isActive: "Active?"
 }
 
-const primaryKeys: Record<string, string> = {
-  phonelines: "phone_number",
-  sims: "sim_number",
-  phones: "imei"
-};
+// const primaryKeys: Record<string, string> = {
+//   phonelines: "phone_number",
+//   sims: "sim_number",
+//   phones: "imei"
+// };
 
 function filterDataByQuery(data: (Phone | Line | SIM)[], query: string):(Phone | Line | SIM)[]{
   // Convert the query to lowercase for case-insensitive comparison
@@ -63,7 +62,7 @@ function filterDataByQuery(data: (Phone | Line | SIM)[], query: string):(Phone |
   });
 }
 
-function Table({name,searchQuery,triggerCreate}: TableProps) {
+function Table({name,searchQuery}: TableProps) {
   // Use the custom hook to fetch data from the API
   // This replaces the manual useEffect, useState for data/loading/error
   const { data, isLoading, error, refetch } = useApiData<Phone | Line | SIM>(name);
