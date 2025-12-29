@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import Association from "./Components/Actions/Association";
 import Email from "./Components/Actions/Email";
 import ActivatePhones from './Components/Actions/ActivatePhones';
+import Barcodes from './Components/Actions/Barcodes';
+import NewPhoneLines from './Components/Actions/NewPhoneLines';
 
 
 const simBody: { status: string} = {
@@ -13,12 +15,8 @@ const phoneBody: { hasSIM: boolean} = {
   hasSIM: true,
 };
 
-const labelBody: {tracking_id: string} = {
-    tracking_id: 'test',
-};
-
-const subscriptionBody: {subscription_id: string} = {
-    subscription_id: ''
+const subscriptionBody: {assigned_to_phone: boolean} = {
+    assigned_to_phone: false
 }
 
 function Actions() {
@@ -43,8 +41,8 @@ function Actions() {
                 firstPK={"tracking_id"}
                 secondPK={"subscription_id"}
                 foreignKeyField={"subscription_id"}
-                firstBody={labelBody}
-                secondBody={subscriptionBody}
+                firstBody={{}}
+                secondBody={{}}
                 />
         );
     }  else if(action_id == "label2phone"){
@@ -55,12 +53,14 @@ function Actions() {
                 firstPK={"imei"}
                 secondPK={"tracking_id"}
                 foreignKeyField={"tracking_id"}
-                firstBody={labelBody}
+                firstBody={{}}
                 secondBody={subscriptionBody}
                 />
         );
     } else if(action_id == "activatePhones"){
         return (<ActivatePhones />)
+    } else if (action_id == "newPhoneLines"){
+        return (<NewPhoneLines />)
     } else if(action_id == "requestMoreLines"){
         return (<Email endpoint={"/moreLines"} />)
     } else if(action_id == "requestMoreBlankSims"){
@@ -69,6 +69,8 @@ function Actions() {
         return(<div><p>test phones</p></div>)
     } else if(action_id == "generateShippingLabels"){
         return (<Email endpoint={"/shipment-file"} />)
+    } else if(action_id == "generatePhoneBarcodes"){
+        return (<Barcodes />)
     } else if(action_id == "reorderMorePhones"){
         return (<Email endpoint={"/more-phones"} />)
     } else {

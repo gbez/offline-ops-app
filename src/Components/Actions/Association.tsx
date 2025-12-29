@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 type Props = {
@@ -47,6 +48,7 @@ function Association({
   const [error, setError] = useState<string | null>(null);
   const [localScannerEnabled, setLocalScannerEnabled] = useState(scannerMode);
   const [isSimActive, setIsSimActive] = useState(false);
+  const [isPrintBarcodeEnabled, setIsPrintBarcodeEnabled] = useState(false);
 
   const sheetTwoRef = useRef<HTMLInputElement | null>(null);
   const sheetOneRef = useRef<HTMLInputElement | null>(null);
@@ -142,7 +144,10 @@ function Association({
         console.log(body);
         await axios.get(url);
         console.log("phone exists...trying to patch");
-        await axios.put(url, {...body,...firstBody});
+        const updatedFirstBody = isPrintBarcodeEnabled && firstEndPoint === 'phones'
+          ? { ...firstBody, printBarcode: true }
+          : firstBody;
+        await axios.put(url, {...body,...updatedFirstBody});
         setMessage(`Updated '${firstEndPoint}' with value ${firstValue} and linked to '${secondEndPoint}' with value ${secondValue}.`);
       } catch (err: any) {
         const url = `${base}/api/v1/${firstEndPoint}/`;
@@ -150,7 +155,10 @@ function Association({
         body[foreignKeyField] = secondValue;
         console.log(url);
         console.log(body);
-        await axios.post(url, {...body,...firstBody});
+        const updatedFirstBody = isPrintBarcodeEnabled && firstEndPoint === 'phones'
+          ? { ...firstBody, printBarcode: true }
+          : firstBody;
+        await axios.post(url, {...body,...updatedFirstBody});
         setMessage(`Created new ${firstEndPoint} with value ${firstValue} and linked to '${secondEndPoint}' with value ${secondValue}.`);
       }
     } catch (err: any) {
@@ -196,6 +204,22 @@ function Association({
   const simulateScanSecond = (value: string) => {
     setSecondValue(value);
     // submission will happen via effect if scanner enabled
+  };
+
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const getButtonStyle = (href: string) => {
+    const isActive = currentPath === href;
+    return {
+      padding: '8px 16px',
+      backgroundColor: isActive ? '#007bff' : 'white',
+      color: isActive ? 'white' : '#007bff',
+      textDecoration: 'none',
+      borderRadius: '4px',
+      display: 'inline-block',
+      border: isActive ? 'none' : '2px solid #007bff',
+    };
   };
 
   return (
@@ -257,6 +281,19 @@ function Association({
         </div>
       )}
 
+      {currentPath === '/actions/sim2phone' && (
+        <div className="scanner-toggle" style={{ marginTop: 8 }}>
+          <label>
+            <input
+              type="checkbox"
+              checked={isPrintBarcodeEnabled}
+              onChange={(e) => setIsPrintBarcodeEnabled(e.target.checked)}
+            />
+            Print Phone Barcode
+          </label>
+        </div>
+      )}
+
       {/* Toast notification */}
       {toast && (
         <div
@@ -270,6 +307,22 @@ function Association({
           </button>
         </div>
       )}
+
+      {/* Navigation buttons */}
+      <div style={{ marginTop: '24px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+        <a href="/actions/sim2phone" style={getButtonStyle('/actions/sim2phone')}>
+          SIM to Phone
+        </a>
+        <a href="/actions/subscription2label" style={getButtonStyle('/actions/subscription2label')}>
+          Subscription to Label
+        </a>
+        <a href="/actions/label2phone" style={getButtonStyle('/actions/label2phone')}>
+          Label to Phone
+        </a>
+        <a href="/actions/generatePhoneBarcodes" style={getButtonStyle('/actions/generatePhoneBarcodes')}>
+          Print Phone Barcodes
+        </a>
+      </div>
 
     </div>
   );

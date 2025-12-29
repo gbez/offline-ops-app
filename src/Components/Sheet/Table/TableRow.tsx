@@ -24,7 +24,7 @@ const TableRow = ({columns,data, onRowClick, interfaceType, columnWidths}:Props)
     
     const rowStyle: React.CSSProperties = {
         cursor: 'pointer',
-        ...(needsHighlight() ? { backgroundColor: '#fff3cd', fontWeight: '500' } : {})
+        ...(needsHighlight() ? { backgroundColor: '#fcb8afff', fontWeight: '500' } : {})
     };
 
     console.log('Rendering TableRow with data:', data);

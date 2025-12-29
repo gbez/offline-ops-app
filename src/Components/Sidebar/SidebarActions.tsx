@@ -5,10 +5,7 @@ type actions = {
     subscription2label: string,
     label2phone: string,
     activatePhones: string,
-    requestMoreBlankSims: string,
     testPhones: string,
-    generateShippingLabels: string,
-    reorderMorePhones: string,
     [key: string]: string
 }
 
@@ -17,11 +14,16 @@ const MyActions: actions = {
     "subscription2label": "Subscription < > Label",
     "label2phone":"Label < > Phone",
     "activatePhones": "Activate Phones",
-    "requestMoreBlankSims": "Request More Blank SIMs",
-    "reorderMorePhones": "Reorder More Phones",
-    "generateShippingLabels": "Generate Shipping Labels",
+    "newPhoneLines": "Upload New Phone Lines",
+    "generatePhoneBarcodes": "Generate Phone Barcodes",
     "testPhones": "Test Phones"
 }
+
+/**
+ * "generateShippingLabels": "Generate Shipping Labels",
+ * "requestMoreBlankSims": "Request More Blank SIMs",
+    "reorderMorePhones": "Reorder More Phones",
+ */
 
 function SidebarActions() {
     return (

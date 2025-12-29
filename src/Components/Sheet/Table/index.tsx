@@ -211,7 +211,6 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
 
     return (
         <>
-        <div className='table'>
         <table>
             <thead>
                 <TableHead 
@@ -231,7 +230,6 @@ function Table({name,searchQuery,triggerCreate}: TableProps) {
                ))}
             </tbody>
         </table>
-        </div>
         
         <Modal
             isOpen={isModalOpen}

@@ -13,6 +13,7 @@
   --bg: white;
   --card-bg: white;
   --muted: #6b7280;
+  --color1: #ffde21;
   width: 100%;
   min-height: 100vh; 
   box-sizing: border-box; /* Ensures padding and borders are included in the element's total width/height */
@@ -98,10 +99,6 @@ html, body, #root {
   border: 3px solid black;
 }
 
-thead tr{
-  position: relative;
-}
-
 .dashboard-footer {
   text-align: center;
   padding: 0.75rem 0;
@@ -131,7 +128,7 @@ thead tr{
 
 .sheet-options li{
   padding: 10px;
-  color: blue;
+  color: black;
   background-color: white;
   border: 3px solid black;
   border-radius: 10px;
@@ -148,7 +145,7 @@ thead tr{
 
 .sidebar-options li{
   padding: 10px;
-  color: blue;
+  color: black;
   background-color: white;
   border: 3px solid black;
   border-radius: 10px;
@@ -156,7 +153,7 @@ thead tr{
 }
 
 .sidebar-options li:hover{
-  background-color: aqua;
+  background-color: var(--color1);
 }
 
 .sidebar-actions{
@@ -180,11 +177,11 @@ thead tr{
 
 
 .selected{
-  background-color: aqua !important;
+  background-color: var(--color1) !important;
 }
 
 .sheet-options li:hover{
-  background-color: aqua;
+  background-color: var(--color1);
 }
 
 .sheet-options li:last-child{
@@ -214,16 +211,23 @@ thead tr{
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
+  position: relative;
+}
+
+.sheet-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .sheet-table th{
   padding: 0.5rem;
-  position: sticky;
-  top: 0;
-  z-index: 1;
   background-color: white;
   text-align: left;
-  border-bottom: 2px solid #ddd;
+}
+
+.sheet-table thead{
+  border-bottom: 1px solid black;;
 }
 
 .sheet-table td{
@@ -233,7 +237,7 @@ thead tr{
 }
 
 .sheet-table tbody tr:hover{
-  background-color: aqua;
+  background-color: var(--color1);
 }
 
 .search-bar {
