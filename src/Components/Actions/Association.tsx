@@ -49,6 +49,7 @@ function Association({
   const [localScannerEnabled, setLocalScannerEnabled] = useState(scannerMode);
   const [isSimActive, setIsSimActive] = useState(false);
   const [isPrintBarcodeEnabled, setIsPrintBarcodeEnabled] = useState(false);
+  const [isHoveringDashboard, setIsHoveringDashboard] = useState(false);
 
   const sheetTwoRef = useRef<HTMLInputElement | null>(null);
   const sheetOneRef = useRef<HTMLInputElement | null>(null);
@@ -212,7 +213,7 @@ function Association({
     <div className="association-action">
       <h1>Associate Data</h1>
       <form onSubmit={handleSubmit} className="association-form">
-        <div className="form-row">
+        <div className="form-row" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <label htmlFor="sheetOneId">{capitalizeFirstLetter(firstEndPoint)}</label>
           <input
             id="sheetOneId"
@@ -222,9 +223,19 @@ function Association({
             placeholder="scan or type first ID"
             autoComplete="off"
           />
+          {currentPath === '/actions/sim2phone' && (
+            <label style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+              <input
+                type="checkbox"
+                checked={isPrintBarcodeEnabled}
+                onChange={(e) => setIsPrintBarcodeEnabled(e.target.checked)}
+              />
+              Print Phone Barcode
+            </label>
+          )}
         </div>
 
-        <div className="form-row" style={{ marginTop: 8 }}>
+        <div className="form-row" style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: '12px' }}>
           <label htmlFor="sheetTwoId">{capitalizeFirstLetter(secondEndPoint)}</label>
           <input
             id="sheetTwoId"
@@ -234,6 +245,16 @@ function Association({
             placeholder="scan or type second ID"
             autoComplete="off"
           />
+          {secondBody?.status !== undefined && (
+            <label style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+              <input
+                type="checkbox"
+                checked={isSimActive}
+                onChange={(e) => setIsSimActive(e.target.checked)}
+              />
+              Active SIM
+            </label>
+          )}
         </div>
 
         <div className="form-row form-row--button" style={{ marginTop: 12 }}>
@@ -253,32 +274,6 @@ function Association({
           Scanner mode (auto-focus and auto-submit)
         </label>
       </div>
-
-      {secondBody?.status !== undefined && (
-        <div className="scanner-toggle" style={{ marginTop: 8 }}>
-          <label>
-            <input
-              type="checkbox"
-              checked={isSimActive}
-              onChange={(e) => setIsSimActive(e.target.checked)}
-            />
-            Active SIM
-          </label>
-        </div>
-      )}
-
-      {currentPath === '/actions/sim2phone' && (
-        <div className="scanner-toggle" style={{ marginTop: 8 }}>
-          <label>
-            <input
-              type="checkbox"
-              checked={isPrintBarcodeEnabled}
-              onChange={(e) => setIsPrintBarcodeEnabled(e.target.checked)}
-            />
-            Print Phone Barcode
-          </label>
-        </div>
-      )}
 
       {/* Toast notification */}
       {toast && (
@@ -309,6 +304,23 @@ function Association({
           Print Phone Barcodes
         </a>
       </div>
+      <a 
+                    href="/" 
+                    onMouseEnter={() => setIsHoveringDashboard(true)}
+                    onMouseLeave={() => setIsHoveringDashboard(false)}
+                    style={{
+                        display: 'inline-block',
+                        padding: '10px 20px',
+                        backgroundColor: isHoveringDashboard ? '#d4b800' : '#ffde21',
+                        color: 'black',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        width: 'fit-content',
+                        transition: 'background-color 0.2s'
+                    }}
+                >
+                    Dashboard
+                </a>
 
     </div>
   );

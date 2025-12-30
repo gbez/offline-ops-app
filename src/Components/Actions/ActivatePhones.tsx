@@ -402,6 +402,20 @@ function ActivatePhones() {
                     {mode === 'activationPending' ? 'Confirm New Line Activations' : 'Confirm Bulk SIM Swap Complete'}
                 </button>
             )}
+             <a 
+                    href="/" 
+                    style={{
+                        display: 'inline-block',
+                        padding: '10px 20px',
+                        backgroundColor: '#ffde21',
+                        color: 'black',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        width: 'fit-content'
+                    }}
+                >
+                    Dashboard
+                </a>
         </div>
     )
 }

@@ -27,7 +27,6 @@ const TableRow = ({columns,data, onRowClick, interfaceType, columnWidths}:Props)
         ...(needsHighlight() ? { backgroundColor: '#fcb8afff', fontWeight: '500' } : {})
     };
 
-    console.log('Rendering TableRow with data:', data);
     return (
         <tr onClick={onRowClick} style={rowStyle}>
             {columns.map((col,i) => {

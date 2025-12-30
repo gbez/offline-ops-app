@@ -257,6 +257,20 @@ function NewPhoneLines() {
           {error}
         </div>
       )}
+       <a 
+                    href="/" 
+                    style={{
+                        display: 'inline-block',
+                        padding: '10px 20px',
+                        backgroundColor: '#ffde21',
+                        color: 'black',
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        width: 'fit-content'
+                    }}
+                >
+                    Dashboard
+                </a>
     </div>
   );
 }

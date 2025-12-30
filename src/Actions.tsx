@@ -4,6 +4,7 @@ import Email from "./Components/Actions/Email";
 import ActivatePhones from './Components/Actions/ActivatePhones';
 import Barcodes from './Components/Actions/Barcodes';
 import NewPhoneLines from './Components/Actions/NewPhoneLines';
+import TestPhones from "./Components/Actions/TestPhones";
 
 
 const simBody: { status: string} = {
@@ -60,12 +61,8 @@ function Actions() {
         return (<ActivatePhones />)
     } else if (action_id == "newPhoneLines"){
         return (<NewPhoneLines />)
-    } else if(action_id == "requestMoreLines"){
-        return (<Email endpoint={"/moreLines"} />)
-    } else if(action_id == "requestMoreBlankSims"){
-        return (<Email endpoint={"/moreblanksims"} />)
     } else if(action_id == "testPhones"){
-        return(<div><p>test phones</p></div>)
+        return(<TestPhones />)
     } else if(action_id == "generateShippingLabels"){
         return (<Email endpoint={"/shipment-file"} />)
     } else if(action_id == "generatePhoneBarcodes"){

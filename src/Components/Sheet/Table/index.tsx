@@ -206,8 +206,6 @@ function Table({name,searchQuery}: TableProps) {
 
 
   const columns: string[] = fields[name];
-  console.log(columns);
-
     return (
         <>
         <table>
