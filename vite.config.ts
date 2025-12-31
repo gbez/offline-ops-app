@@ -6,7 +6,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     allowedHosts: [
-      '.ngrok-free.app'
+      '.ngrok-free.app',
+      'offline-ops-app-3b962de53c4d.herokuapp.com'
+    ],
+  },
+  preview: {
+    allowedHosts: [
+      '.ngrok-free.app',
+      'offline-ops-app-3b962de53c4d.herokuapp.com'
     ],
   },
 })
