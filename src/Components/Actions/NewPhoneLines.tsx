@@ -106,6 +106,15 @@ function NewPhoneLines() {
         } catch (err) {
           console.error(`Failed to update phone for SIM ${line.sim_number}:`, err);
         }
+
+        // Update SIM status to Active
+        try {
+          await axios.put(`${base}/api/v1/sims/${encodeURIComponent(line.sim_number)}`, {
+            status: "Active"
+          });
+        } catch (err) {
+          console.error(`Failed to update SIM status for ${line.sim_number}:`, err);
+        }
       });
 
       await Promise.all(promises);

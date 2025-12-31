@@ -109,7 +109,7 @@ function ActivatePhones() {
             setShowConfirmButton(true);
             setDisplayedPhones(pendingActivationPhones);
             setRemainingSlots(0);
-            setInstructions(`New activation pending for ${pendingActivationPhones.length} phone${pendingActivationPhones.length === 1 ? '' : 's'}. Confirm when complete.`);
+            setInstructions(`New activation pending for ${pendingActivationPhones.length} phone${pendingActivationPhones.length === 1 ? '' : 's'}. Upload New Lines from T Mobile Order Confirmation Email.`);
             setSubmitButton(""); // Hide submit button in pending mode
             setErrorMessage('');
         } else if (availableLines.length > 0) {
@@ -277,12 +277,16 @@ function ActivatePhones() {
                 const availableSims: string[] = activationPhones
                     .map(phone => phone.sim_number)
                     .filter((sim): sim is string => sim !== null && sim !== undefined);
-                await axios.post(`${base}/handle-new-activations`,{simNumberList:availableSims,email:"grant@offline.community"})
+                await axios.post(`${base}/handle-new-activations`,{simNumberList:availableSims})
                 
                 for (const phone of activationPhones) {
                     const url = `${base}/api/v1/phones/${encodeURIComponent(phone.imei)}`;
                     await axios.put(url, { newActivationStatus: 'Pending' });
                 }
+                
+                // Open new tab to newPhoneLines action
+                window.open('/actions/newPhoneLines', '_blank');
+                
                 window.location.reload();
                 console.log('Updated phones to Pending activation status');
             } catch (error) {
@@ -311,24 +315,49 @@ function ActivatePhones() {
                 console.error('Error updating phones to Completed:', error);
                 setErrorMessage('Error confirming phones. Please try again.');
             }
-        } else if (mode === 'activationPending') {
-            // Change all Pending activation phones to Completed
-            const pendingActivationPhones = filterPendingActivationPhones(phones);
+        } 
+    };
+
+    const handleCancelPhone = async (imei: string) => {
+        try {
+            const base = import.meta.env.VITE_API_URL;
+            const url = `${base}/api/v1/phones/${encodeURIComponent(imei)}`;
             
-            try {
-                const base = import.meta.env.VITE_API_URL;
-                
-                for (const phone of pendingActivationPhones) {
-                    const url = `${base}/api/v1/phones/${encodeURIComponent(phone.imei)}`;
-                    await axios.put(url, { newActivationStatus: 'Completed' });
-                }
-                
-                console.log('Updated phones to Completed activation status');
-                window.location.reload();
-            } catch (error) {
-                console.error('Error updating phones to Completed:', error);
-                setErrorMessage('Error confirming phones. Please try again.');
+            // Determine which field to clear based on mode
+            const body = mode === 'activation'
+                ? { newActivationStatus: '' }
+                : { bulkSIMSwapStatus: '' };
+            
+            await axios.put(url, body);
+            console.log('Cancelled phone:', imei);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error cancelling phone:', error);
+            setErrorMessage('Error cancelling phone. Please try again.');
+        }
+    };
+
+    const handleCancelAll = async () => {
+        if (displayedPhones.length === 0) return;
+        
+        try {
+            const base = import.meta.env.VITE_API_URL;
+            
+            // Determine which field to clear based on mode
+            const body = mode === 'activation'
+                ? { newActivationStatus: '' }
+                : { bulkSIMSwapStatus: '' };
+            
+            for (const phone of displayedPhones) {
+                const url = `${base}/api/v1/phones/${encodeURIComponent(phone.imei)}`;
+                await axios.put(url, body);
             }
+            
+            console.log('Cancelled all phones');
+            window.location.reload();
+        } catch (error) {
+            console.error('Error cancelling all phones:', error);
+            setErrorMessage('Error cancelling phones. Please try again.');
         }
     };
 
@@ -382,10 +411,30 @@ function ActivatePhones() {
                         {isPhoneListExpanded ? '▼' : '▶'} Phones ({displayedPhones.length})
                     </h3>
                     {isPhoneListExpanded && (
-                        <ul>
+                        <ul style={{ listStyle: 'none', padding: 0 }}>
                             {displayedPhones.map((phone, index) => (
-                                <li key={phone.imei || index}>
-                                    IMEI: {phone.imei} {phone.sim_number && `| SIM: ${phone.sim_number}`}
+                                <li key={phone.imei || index} style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                                    <span style={{ flex: 1 }}>
+                                        IMEI: {phone.imei} {phone.sim_number && `| SIM: ${phone.sim_number}`}
+                                    </span>
+                                    {(mode === 'bulkSwap' || mode === 'activation') && (
+                                        <button 
+                                            onClick={() => handleCancelPhone(phone.imei)}
+                                            style={{
+                                                marginLeft: '10px',
+                                                backgroundColor: '#dc3545',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '3px',
+                                                cursor: 'pointer',
+                                                padding: '2px 8px',
+                                                fontSize: '14px'
+                                            }}
+                                            title="Cancel this phone"
+                                        >
+                                            ×
+                                        </button>
+                                    )}
                                 </li>
                             ))}
                         </ul>
@@ -397,9 +446,26 @@ function ActivatePhones() {
                 <button type="button" onClick={handleSubmitButton}>{submitButton}</button>
             )}
             
-            {showConfirmButton && (
+            {showConfirmButton && mode === 'pending' && (
                 <button onClick={handleConfirm} style={{ marginLeft: '10px', backgroundColor: '#28a745', color: 'white' }}>
-                    {mode === 'activationPending' ? 'Confirm New Line Activations' : 'Confirm Bulk SIM Swap Complete'}
+                    Confirm Bulk SIM Swap Complete
+                </button>
+            )}
+            
+            {displayedPhones.length > 0 && (mode === 'bulkSwap' || mode === 'activation') && (
+                <button 
+                    onClick={handleCancelAll}
+                    style={{ 
+                        marginLeft: '10px', 
+                        backgroundColor: '#dc3545', 
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '4px',
+                        padding: '10px 20px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Cancel All
                 </button>
             )}
              <a 

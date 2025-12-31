@@ -144,9 +144,17 @@ const Modal = ({ isOpen, onClose, mode, interfaceType, data, onSuccess }: ModalP
         return mode === 'edit' && primaryKeys[interfaceType] === field;
     };
 
+    const isFieldDisabled = (field: string): boolean => {
+        // Primary keys cannot be edited
+        if (isPrimaryKey(field)) return true;
+        // sim_number cannot be edited in any interface when in edit mode
+        if (mode === 'edit' && field === 'sim_number') return true;
+        return false;
+    };
+
     const renderFormField = (field: string, value: string | boolean | undefined) => {
         const fieldType = typeof value;
-        const isDisabled = isPrimaryKey(field);
+        const isDisabled = isFieldDisabled(field);
 
         if (fieldType === 'boolean') {
             return (

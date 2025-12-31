@@ -137,14 +137,33 @@ function Association({
 
       console.log(`second data: ${JSON.stringify(secondData)}`);
 
+      // Validate label has subscription_id when associating with phones
+      if (secondPK === 'tracking_id' && secondData) {
+        if (!secondData.subscription_id || secondData.subscription_id === '') {
+          setError(`Label ${secondValue} does not have a subscription_id. Please assign a subscription to this label before associating it with a phone.`);
+          return;
+        }
+      }
+
       // Check sheetOne
+      let firstData: any = null;
       try {
         const url = `${base}/api/v1/${firstEndPoint}/${encodeURIComponent(firstValue)}`;
         body[foreignKeyField] = secondValue;
         console.log(url);
         console.log(body);
-        await axios.get(url);
+        const res = await axios.get(url);
+        firstData = res.data;
         console.log("phone exists...trying to patch");
+        
+        // Validate phone is tested when associating with labels
+        if (firstPK === 'imei' && firstData) {
+          if (!firstData.isTested || firstData.isTested === 0 || firstData.isTested === false) {
+            setError(`Phone ${firstValue} has not been tested yet. Please test the phone before associating it with a label.`);
+            return;
+          }
+        }
+        
         const updatedFirstBody = isPrintBarcodeEnabled && firstEndPoint === 'phones'
           ? { ...firstBody, printBarcode: true }
           : firstBody;
